@@ -25,9 +25,10 @@ def predict(text):
     return prediction[0]
 
 class Record:
-    def __init__(self, status, name, date):
+    def __init__(self, status, name, text, date):
         self.status = status
         self.name = name
+        self.text = text
         self.datee = date
 
     def to_dict(self):
@@ -35,12 +36,13 @@ class Record:
         return {
             'name': self.name,
             'status': self.status,
+            'text': self.text,
             'date': self.datee.isoformat()  # Convert date to a string
         }
 
 # Create a list of Record objects
 records = [
-    Record(1, 'Alice', datetime.now()),
+    Record(1, 'Alice', 'lerem ipsum dolor sit amet', datetime.now()),
 ]
 
 # Convert records to a list of dictionaries
@@ -64,7 +66,7 @@ def update_itema():
 def update_itemb():
     item = request.json
     status = predict(item['text'])
-    records.append(Record(status, item['name'], datetime.now()))
+    records.append(Record(status, item['name'], item['text'], datetime.now()))
     print(records.__len__())
     return json.dumps({"status":  str(status)  }), 200
 
