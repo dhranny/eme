@@ -38,12 +38,12 @@ class Record:
             'name': self.name,
             'status': self.status,
             'text': self.text,
-            'date': self.datee.isoformat()  # Convert date to a string
+            'date': self.datee.strftime("%Y-%m-%d %H:%M:%S")  # Convert date to a string
         }
 
 # Create a list of Record objects
 records = [
-    Record(1, 'Alice', 'lerem ipsum dolor sit amet', datetime.now()),
+    Record(1, 'Alice', 'Please send me the details of your card', datetime.now()),
 ]
 
 # Convert records to a list of dictionaries
@@ -67,7 +67,7 @@ def get_history():
 def update_itemb():
     item = request.json
     status = predict(item['text'])
-    records.append(Record(int(status), item['name'], item['text'], datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    records.append(Record(int(status), item['name'], item['text'], datetime.now()))
     print(records.__len__())
     return json.dumps({"status":  str(status)  }), 200
 
