@@ -1,6 +1,7 @@
 import os
 from flask import Flask, jsonify, request
 from datetime import datetime
+import numpy as np
 import json
 import joblib
 
@@ -58,7 +59,7 @@ def hello_world():
   return 'Welcome to scam detector'
 
 @app.route('/history')
-def update_itema():
+def get_history():
     item = request.get_data
     return jsonify(records_dict()), 200
 
@@ -66,7 +67,7 @@ def update_itema():
 def update_itemb():
     item = request.json
     status = predict(item['text'])
-    records.append(Record(status, item['name'], item['text'], datetime.now()))
+    records.append(Record(int(status), item['name'], item['text'], datetime.now().isoformat))
     print(records.__len__())
     return json.dumps({"status":  str(status)  }), 200
 
