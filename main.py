@@ -67,7 +67,7 @@ def get_history():
 def update_itemb():
     item = request.json
     status = predict(item['text'])
-    records.append(Record(int(status), item['name'], item['text'], datetime.now().isoformat))
+    records.append(Record(int(status), item['name'], item['text'], datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     print(records.__len__())
     return json.dumps({"status":  str(status)  }), 200
 
