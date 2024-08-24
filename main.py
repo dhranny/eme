@@ -8,7 +8,6 @@ import joblib
 
 model = joblib.load("scam_detection_model.joblib")
 vectorizer = joblib.load("vectorizer.joblib")
-
 def preprocess_input(text):
     # You can add any necessary preprocessing steps here
     return text
@@ -24,6 +23,12 @@ def predict(text):
     prediction = model.predict(vectorized_text)
 
     return prediction[0]
+
+class User:
+# Suggested code may be subject to a license. Learn more: ~LicenseLog:3307798325.
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
 class Record:
     def __init__(self, status, name, text, date):
@@ -46,6 +51,12 @@ records = [
     Record(1, 'Alice', 'Please send me the details of your card', datetime.now()),
 ]
 
+# Create a list of Users
+users = [
+    User('ayodeji', 'Alice'),
+]
+
+
 # Convert records to a list of dictionaries
 def records_dict():
     return [record.to_dict() for record in records]
@@ -63,8 +74,25 @@ def get_history():
     item = request.get_data
     return jsonify(records_dict()), 200
 
+@app.route('/login', methods=['POST'])
+def login():
+    item = request.json
+    for e in users:
+        if e.username == item['username'] and e.password == item['password']:
+            return json.dumps({"status":  "success"  }), 200
+    return json.dumps({"status":  "failure"  }), 403
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    item = request.json
+    for e in users:
+        if e.username == item['username']:
+            return json.dumps({"status":  "failure"  }), 403
+    users.append(User(item['username'], item['password']))
+    return json.dumps({"status":  "success"  }), 200
+
 @app.route('/test', methods=['POST'])
-def update_itemb():
+def test():
     item = request.json
     status = predict(item['text'])
     records.append(Record(int(status), item['name'], item['text'], datetime.now()))
